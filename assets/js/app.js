@@ -41,9 +41,9 @@ movieContainer = (movies) => {
     movieElement.setAttribute("class", "movie");
 
     const movieTemplate = `
-        <section class="movie-section">
+        <div class="movie-section">
             ${movieSection(movies)}  
-        </section> 
+        </div> 
         <div class="content">
             <p id="close-content">CLOSE HERE!!!!</p>
         </div>
