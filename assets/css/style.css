@@ -50,3 +50,13 @@ img:hover{
     cursor: pointer;
     
 }
+
+.content-section {
+    border: 2px solid orangered;
+    display: none;
+}
+
+.content-section-display {
+    display: block;
+    cursor: pointer;
+}

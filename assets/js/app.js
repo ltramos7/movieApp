@@ -3,9 +3,11 @@ const url = "https://api.themoviedb.org/3/search/movie?api_key=575e3ea9e83cb6a26
 const imgUrl = "https://image.tmdb.org/t/p/w300"
 // const creditUrl = "https://api.themoviedb.org/3/movie/550?api_key=575e3ea9e83cb6a265c7d932c710688a&append_to_response=credits"
 
+
 const btnElement = document.getElementById("search-btn")
 const inputElement = document.getElementById("input-value")
 const searchedMovies = document.getElementById("searched-movies")
+const imageElement = document.querySelector("img")
 
 // movieSection = (movies) => {
 //    return movies.map((movie)=>{
@@ -21,36 +23,56 @@ const searchedMovies = document.getElementById("searched-movies")
 movieSection = (movies) => {
     return movies.map((movie)=>{
         if (movie.poster_path){
-            return `<img src=${imgUrl + movie.poster_path} alt="" data-movie-id=${movie.id} /> 
-                <p>Title:  ${movie.title}</p>
-                <p>Director: </p>
-                <p>Release Year: ${movie.release_date}</p>
-                <p>Description: ${movie.overview} </p>`
+            return `<img src=${imgUrl + movie.poster_path} alt="" data-movie-id=${movie.id} /> `
+                // <p>Title:  ${movie.title}</p>
+                // <p>Director: </p>
+                // <p>Release Year: ${movie.release_date}</p>
+                // <p>Description: ${movie.overview} </p>`
             }
         else{
-            return `<h1> NO IMAGE AVAILABLE</h1>
-                <p>Title:  ${movie.title}</p>
-                <p>Director: </p>
-                <p>Release Year: ${movie.release_date}</p>
-                <p>Description: ${movie.overview} </p>`
+            return `<h1> NO IMAGE AVAILABLE</h1>`
+                // <p>Title:  ${movie.title}</p>
+                // <p>Director: </p>
+                // <p>Release Year: ${movie.release_date}</p>
+                // <p>Description: ${movie.overview} </p>`
             }
-    })}
+    })
+}
+
+contentSection = (movies) => {
+    return movies.map((movie)=>{
+        return `
+            <p>Title:  ${movie.title}</p>
+            <p>Director: </p>
+            <p>Release Year: ${movie.release_date}</p>
+            <p>Description: ${movie.overview} </p>
+        `
+    })
+}
 
 movieContainer = (movies) => {
     const movieElement = document.createElement("div");
     movieElement.setAttribute("class", "movie");
 
     const movieTemplate = `
-        <div class="movie-section">
-            ${movieSection(movies)}  
-        </div> 
-        <div class="content">
-            <p id="close-content">CLOSE HERE!!!!</p>
-        </div>
-    `;
+    <div class="movie-section">
+        ${movieSection(movies)}  
+    </div> 
+    <div class="content-section">
+        <p id="close-content">Close Content</p>
+    </div>
+`;
 
-    movieElement.innerHTML = movieTemplate;
-    console.log("movieContainer function hit")
+    // const movieTemplate = `
+    //     <div class="movie-section">
+    //         ${movieSection(movies)}  
+    //     </div> 
+    //     <div class="content-section">
+    //         <p id="close-content">${contentSection(movies)}</p>
+    //     </div>
+    // `;
+
+    movieElement.innerHTML = movieTemplate; 
     return movieElement;
 }
 
@@ -66,10 +88,23 @@ renderSearchMovies = (data) => {
 btnElement.onclick = (event) => {
     event.preventDefault()
     const value = inputElement.value
-    console.log(value)
     
     fetch(url+ "&query=" + value)
     .then(resp => resp.json() )
     .then(renderSearchMovies)
-    // inputElement.value="";
+    inputElement.value="";
+}
+
+document.onclick = (event) => {
+    if (event.target.tagName === "IMG"){
+        console.log(event.target.dataset.movieId)
+        const movieSection = event.target.parentElement;
+        const contentSection = movieSection.nextElementSibling;
+        contentSection.classList.add("content-section-display")
+    }
+
+    if (event.target.id == "close-content"){
+        const contentSection = event.target.parentElement;
+        contentSection.classList.remove("content-section-display")
+    }
 }
