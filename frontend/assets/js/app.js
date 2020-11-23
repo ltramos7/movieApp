@@ -43,9 +43,7 @@ movieContainer = (movies) => {
         ${movieSection(movies)}  
     </div> 
     <div class="content-section">
-        <p id="close-content">Close Content</p>
-        <button>Thumbs Up</button>   
-        <button>Thumbs Down</button>   
+        <p id="close-content">Close Content</p> 
     </div>
 `;
     movieElement.innerHTML = movieTemplate; 
@@ -58,8 +56,6 @@ renderSearchMovies = (data) => {
     const movieArea = movieContainer(movies);
     searchedMovies.appendChild(movieArea)
 }
-
-
 
 btnElement.onclick = (event) => {
     event.preventDefault()
@@ -92,6 +88,8 @@ retrieveMovieData = (movie) => {
         <p>Director: ${director}</p>
         <p>Release Year: ${movie.release_date}</p>
         <p>Description: ${movie.overview}</p>
+        <button>Thumbs Up</button>   
+        <button>Thumbs Down</button>  
     `
     contentSection.innerHTML = contentTemplate
  
