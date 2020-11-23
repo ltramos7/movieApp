@@ -31,13 +31,13 @@
     border-radius: .25rem;
 }
 
-.movie-section {
+.searched-movie-section {
     display: flex; 
     width: 100%;
     overflow-x: auto;
 }
 
-.movie-section img{
+.searched-movie-section img{
     width: 400px;
     height: 400px;
     border-radius: 20px;
