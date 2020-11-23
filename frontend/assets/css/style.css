@@ -1,0 +1,62 @@
+.form-group {
+    margin-bottom: 1rem;
+}
+
+#search-btn  {
+    color: #fff;
+    background-color: #007bff;
+    outline: none;
+    min-height: 38px;
+    font-weight: 400;
+    text-align: center;
+    cursor: pointer;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: .25rem;
+    margin-bottom: 1rem;
+    
+}
+
+#input-value {
+    width: 760px;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    outline: none;
+    color: rgb(102, 97, 97);
+    background-color: #fff;
+    border: 1px solid #bebebe;
+    border-radius: .25rem;
+}
+
+.searched-movie-section {
+    display: flex; 
+    width: 100%;
+    overflow-x: auto;
+}
+
+.searched-movie-section img{
+    width: 400px;
+    height: 400px;
+    border-radius: 20px;
+
+}
+
+img:hover{
+    margin-left: 0 40px;
+    transform: scale(1.2);
+    cursor: pointer;
+    
+}
+
+.content-section {
+    border: 2px solid orangered;
+    display: none;
+}
+
+.content-section-display {
+    display: block;
+    cursor: pointer;
+}
