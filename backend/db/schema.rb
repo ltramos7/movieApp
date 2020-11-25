@@ -13,6 +13,7 @@
 ActiveRecord::Schema.define(version: 2020_11_24_164545) do
 
   create_table "movies", force: :cascade do |t|
+    t.integer "movie_id"
     t.string "movie_title"
     t.integer "thumbs_up"
     t.integer "thumbs_down"
