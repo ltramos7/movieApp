@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  moive_title: MyString
+  thumbs_up: 1
+  thumbs_down: 1
+
+two:
+  moive_title: MyString
+  thumbs_up: 1
+  thumbs_down: 1
