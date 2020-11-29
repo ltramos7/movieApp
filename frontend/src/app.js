@@ -155,33 +155,63 @@ document.onclick = (event) => {
         const movieId = movie.dataset.movieId
         const movieTitle = movie.title
 
-        console.log(movieId)
+        // fetch(movieBackendURL, createPostObj(movieId, movieTitle))
+        // .then( resp => resp.json() )
+        // .then( movieData => console.log(movieData))
+        // .catch( err => console.log(err))
 
-        fetch(movieBackendURL, createPostObj(movieId, movieTitle))
+        fetch(movieBackendURL)
         .then( resp => resp.json() )
-        .then( movieData => console.log(movieData))
+        .then( moviesDatas => checkForMovie(moviesDatas, movieId, movieTitle))
         .catch( err => console.log(err))
+
+        // fetch(movieBackendURL)
+        // .then(resp => resp.json())
+        // .then(data => matchingMovie?)
+
+        // matchingMovie? = () => 
+        //  map through each object. get object.id. Check if object.id === movieId. 
+        //  if true then increase like by 1
+        //  if falsek then post the new thumbed up movie to the backend.    
+        // }
+
     }
 }
 
-createPostObj = (movieId, movieTitle) => {
-    return {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Accept": "application/json"
-        },
-        body: JSON.stringify({
-            movie_id: movieId,
-            movie_title: movieTitle,
-            thumbs_up: 1,
-            thumbs_down: 0
-        })
-    }
+checkForMovie = (moviesDatas, movieId, movieTitle) => {
+    console.log("movie data", moviesDatas) //an array of possible matching movies
+    console.log("movie Id", movieId)
+    console.log("movieTitle", movieTitle)
+    let matchingMovie = {}
+    
+    // const found = moviesDatas.find(movie => movie.movie_id == movieId)
+    moviesDatas.forEach( movie => {
+        if (movie.movie_id == movieId){
+             matchingMovie = movie
+        }
+    })
+    console.log(matchingMovie)
+    debugger   
 }
 
-addThumbsUp = () => {
-    if (document.getElementById(""))
-}
+// createPostObj = (movieId, movieTitle) => {
+//     return {
+//         method: "POST",
+//         headers: {
+//             "Content-Type": "application/json",
+//             "Accept": "application/json"
+//         },
+//         body: JSON.stringify({
+//             movie_id: movieId,
+//             movie_title: movieTitle,
+//             thumbs_up: 1,
+//             thumbs_down: 0
+//         })
+//     }
+// }
 
-//Event Listeners
+// addThumbsUp = () => {
+    
+// }
+
+
