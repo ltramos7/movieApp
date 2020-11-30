@@ -54,12 +54,14 @@ searchBtnElement.onclick = (event) => {
     inputElement.value="";
 }
 
-movieObject = (movieId) => {
+//this is searching for the credits of the clicked movie
+movieObject = (movieId) => { 
     fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=575e3ea9e83cb6a265c7d932c710688a&append_to_response=credits`)
     .then(resp => resp.json() )
     .then(data => retrieveMovieData(data) )
 }
 
+// this is creating the clicked movie's content card
 retrieveMovieData = (movie) => {
 
     const contentSection = document.querySelector(".content-section")
@@ -77,63 +79,13 @@ retrieveMovieData = (movie) => {
         <p>Release Year: ${movie.release_date}</p>
         <p>Description: ${movie.overview}</p>
         <button id="thumbsUp" >Thumbs Up</button>   
-        <button onclick="thumbsDown()">Thumbs Down</button>  
+        <button id="thumbsDown">Thumbs Down</button>  
     `
     contentSection.innerHTML = contentTemplate
 }
 
-// handleThumbsUp = (event) => {
-//     event.preventDefault()
-//     // if the movie_title exists, add to +1 to the Thumbs up
-//     // if the movie_title does not exist, create it, then add +1 to the Thumbs up
-//     console.log("handleThumbsUp funciton hit.")
 
-//     const movieInfo = document.getElementById("title")
-//     console.log(movieInfo.title)
-
-
-//     const postObj = {
-//         method: "POST", 
-//         headers: {
-//             "Content-Type": "application/json",
-//             "Accept": "application/json"
-//         },
-//         body: JSON.stringify({
-//             movie_title: movieInfo.title,
-//             thumbs_up: 0,
-//             thumbs_down: 0
-//         })
-//     }
-//     fetch("http://localhost:3000/movies", postObj)
-//     .then(resp => resp.json() )
-//     .then( data => console.log(data))
-// }
-
-// postNewThumb = () => {
-
-//     const postObj = {
-//         method: "POST",
-//         header: {
-//             "Content-Type": "application/json",
-//             "Accept": "application/json"
-//         },
-//         body: JSON.stringify({
-//             movie_id:,
-//             movie_title:,
-//             thumbsUp: 0,
-//             thumbsDown: 0
-//         })
-//     }
-
-//     fetch("http://localhost:3000/movies/", postObj) 
-// }
-
-thumbsDown = () => {
-    // if the movie_title exists, add to +1 to the Thumbs down
-    // if the movie_title does not exist, create it, then add +1 to the Thumbs down
-    console.log("Thumbs Down button clicked.")
-}
-
+// event handling
 document.onclick = (event) => {
     if (event.target.tagName === "IMG"){
         
@@ -149,69 +101,113 @@ document.onclick = (event) => {
         contentSection.classList.remove("content-section-display")
     }
     
-    if(event.target.id === "thumbsUp"){
+    // this if statement is listening for a thumbsup/down to then make a patch request if a review
+    // of the movie exists or a post request if the movie does not have an exisiting review. 
+    if(event.target.id === "thumbsUp" || event.target.id === "thumbsDown"){
         event.preventDefault()
         const movie = document.getElementById("title")
         const movieId = movie.dataset.movieId
         const movieTitle = movie.title
+        const thumbId = event.target.id
 
-        // fetch(movieBackendURL, createPostObj(movieId, movieTitle))
-        // .then( resp => resp.json() )
-        // .then( movieData => console.log(movieData))
-        // .catch( err => console.log(err))
 
         fetch(movieBackendURL)
         .then( resp => resp.json() )
-        .then( moviesDatas => checkForMovie(moviesDatas, movieId, movieTitle))
+        .then( moviesDatas => checkForMovie(moviesDatas, movieId, movieTitle, thumbId))
         .catch( err => console.log(err))
 
-        // fetch(movieBackendURL)
-        // .then(resp => resp.json())
-        // .then(data => matchingMovie?)
-
-        // matchingMovie? = () => 
-        //  map through each object. get object.id. Check if object.id === movieId. 
-        //  if true then increase like by 1
-        //  if falsek then post the new thumbed up movie to the backend.    
-        // }
 
     }
 }
 
-checkForMovie = (moviesDatas, movieId, movieTitle) => {
-    console.log("movie data", moviesDatas) //an array of possible matching movies
-    console.log("movie Id", movieId)
-    console.log("movieTitle", movieTitle)
+checkForMovie = (moviesDatas, movieId, movieTitle, thumbId) => {
+    console.log(moviesDatas)
+    
     let matchingMovie = {}
     
-    // const found = moviesDatas.find(movie => movie.movie_id == movieId)
-    moviesDatas.forEach( movie => {
-        if (movie.movie_id == movieId){
-             matchingMovie = movie
-        }
-    })
-    console.log(matchingMovie)
-    debugger   
+    if (moviesDatas.length !== 0){
+        console.log("some movies exist")
+        
+
+        moviesDatas.forEach( movie => {
+            //might need to do movie.movie_id == movieObject.id
+            if (movie.movie_id == movieId & thumbId === "thumbsUp"){
+                matchingMovie = movie
+
+                increaseCount(matchingMovie) // patch request to update the thumbs up count
+            }
+            else if (movie.movie_id == movieId & thumbId === "thumbsDown" ) {
+                increaseCount(matchingMovie) // patch request to update teh thumbs down count
+            }
+            else if(movie.movie_id !== movieId){
+                postMovie(movieId, movieTitle, thumbId)
+            }
+        })
+    } else if (moviesDatas.length == 0){
+        postMovie(movieId, movieTitle, thumbId) 
+    }
+   
 }
 
-// createPostObj = (movieId, movieTitle) => {
-//     return {
-//         method: "POST",
-//         headers: {
-//             "Content-Type": "application/json",
-//             "Accept": "application/json"
-//         },
-//         body: JSON.stringify({
-//             movie_id: movieId,
-//             movie_title: movieTitle,
-//             thumbs_up: 1,
-//             thumbs_down: 0
-//         })
-//     }
-// }
-
-// addThumbsUp = () => {
+increaseCount = (matchingMovie) => {
+    console.log(matchingMovie)
+    console.log("movie already exists, so next step is to make a patch update")
     
-// }
+}
+
+
+postMovie = (movieId, movieTitle, thumbId) => {
+    console.log(movieId, movieTitle, thumbId)
+    console.log("postMovie function reached")
+    // if thumbId == thumbsUp then post with thumbs_up: 1 and thumbs_down: 0
+
+    if (thumbId == "thumbsUp"){
+        postObj = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify({
+                movie_id: movieId,
+                movie_title: movieTitle,
+                thumbs_up: 1,
+                thumbs_down: 0
+            })
+        }
+
+        fetch(movieBackendURL, postObj)
+        .then( resp => resp.json() )
+        .then( movieData => console.log(movieData))
+        .catch( err => console.log(err)) 
+
+    }
+    else if (thumbId == "thumbsDown"){
+        postObj = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify({
+                movie_id: movieId,
+                movie_title: movieTitle,
+                thumbs_up: 0,
+                thumbs_down: 1
+            })
+        }
+
+        fetch(movieBackendURL, postObj)
+        .then( resp => resp.json() )
+        .then( movieData => console.log(movieData))
+        .catch( err => console.log(err))
+    }
+}
+
+
+
+
+
+
 
 
