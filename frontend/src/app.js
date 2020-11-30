@@ -120,24 +120,17 @@ document.onclick = (event) => {
     }
 }
 
-checkForMovie = (moviesDatas, movieId, movieTitle, thumbId) => {
-    console.log(moviesDatas)
-    
+checkForMovie = (moviesDatas, movieId, movieTitle, thumbId) => {    
     let matchingMovie = {}
     
     if (moviesDatas.length !== 0){
-        console.log("some movies exist")
-        
-
         moviesDatas.forEach( movie => {
-            //might need to do movie.movie_id == movieObject.id
             if (movie.movie_id == movieId & thumbId === "thumbsUp"){
                 matchingMovie = movie
-
-                increaseCount(matchingMovie) // patch request to update the thumbs up count
+                increaseCount(matchingMovie, thumbId) // patch request to update the thumbs up count
             }
             else if (movie.movie_id == movieId & thumbId === "thumbsDown" ) {
-                increaseCount(matchingMovie) // patch request to update teh thumbs down count
+                increaseCount(matchingMovie, thumbId) // patch request to update teh thumbs down count
             }
             else if(movie.movie_id !== movieId){
                 postMovie(movieId, movieTitle, thumbId)
@@ -149,10 +142,33 @@ checkForMovie = (moviesDatas, movieId, movieTitle, thumbId) => {
    
 }
 
-increaseCount = (matchingMovie) => {
-    console.log(matchingMovie)
-    console.log("movie already exists, so next step is to make a patch update")
+increaseCount = (matchingMovie, thumbId) => {
+    console.log(matchingMovie, thumbId)
+    let thumbs_up = matchingMovie.thumbs_up
+    let backendId = matchingMovie.id
     
+    if(thumbId == "thumbsUp"){
+        
+        
+        patchObj = {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                thumbs_up: thumbs_up + 1
+            })
+        }
+        // console.log("thumbs_up:", thumbs_up)
+        
+        // console.log("patchObj: ", patchObj)
+        // console.log(movieBackendURL + `/${backendId}`)
+
+
+        fetch(movieBackendURL + `/${backendId}`, patchObj)
+        .then(resp => resp.json() )
+        .then(data => console.log(data))
+    }    
 }
 
 
