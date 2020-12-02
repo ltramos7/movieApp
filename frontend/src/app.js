@@ -65,7 +65,7 @@ movieObject = (movieId) => {
 
 // this is creating the clicked movie's content card
 retrieveMovieData = (movie) => {
-    // does a return statement belong here?!?!?!?!?!
+    
     const contentSection = document.querySelector(".content-section")
     const crewMembers = movie.credits.crew
     let director = ""
@@ -81,8 +81,8 @@ retrieveMovieData = (movie) => {
         <p>Director: ${director}</p>
         <p>Release Year: ${movie.release_date}</p>
         <p>Description: ${movie.overview}</p>
-        <submit id="thumbsUp" onclick="thumbRating(event)">Thumbs Up</submit>   
-        <submit id="thumbsDown" onclick="thumbRating(event)">Thumbs Down</button>`
+        <button type="button" id="thumbsUp" onclick="thumbRating(event)">Thumbs Up</button>   
+        <button type="button" id="thumbsDown" onclick="thumbRating(event)">Thumbs Down</button>`
     contentSection.innerHTML = contentTemplate
     
 }
@@ -94,45 +94,24 @@ thumbRating = (event) => {
     const movieId = movie.dataset.movieId
     const movieTitle = movie.title
     const thumbId = event.target.id
-    console.log("checking for a refresh")
     
-    fetchBackendURL(event)
-    // something might be wrong with my fetch
-    // fetch(movieBackendURL)
-    // .then( resp => resp.json() )
-    // .then(data => console.log(data))
-    // .catch( err => console.log(err))
-    // .then( moviesDatas => {checkForMovie(moviesDatas, movieId, movieTitle, thumbId)})
-    
-}
-
-fetchBackendURL = (event) => {
-    console.log("fetch function ---", event)
-    debugger
     fetch(movieBackendURL)
-    .then(resp => resp.json() )
-    .then( data => console.log(data))
+    .then( resp => resp.json() )
+    .then( moviesDatas => {checkForMovie(moviesDatas, movieId, movieTitle, thumbId)})
+    .catch( err => console.log(err))   
 }
     
 checkForMovie = (moviesDatas, movieId, movieTitle, thumbId) => {  
-    
-    console.log(moviesDatas)
+
     let matchingMovie = {}
-        
-    if (moviesDatas.length > 0){
-        
-        moviesDatas.forEach( movie => {
-            
-            if (movie.movie_id == movieId){
-                matchingMovie = movie
-                increaseCount(matchingMovie, thumbId) // patch request to update the thumbs up count
-            }
-            else {
-                postMovie(movieId, movieTitle, thumbId)
-            }
-        })
-    } else {
-        postMovie(movieId, movieTitle, thumbId) 
+
+    matchingMovie = moviesDatas.find(movie => movie.movie_id == movieId)
+ 
+
+    if (matchingMovie) {
+        increaseCount(matchingMovie, thumbId)
+    }else{
+        postMovie(movieId, movieTitle, thumbId)
     }
    
 }
@@ -142,6 +121,7 @@ increaseCount = (matchingMovie, thumbId) => {
     let thumbs_up = matchingMovie.thumbs_up
     let thumbs_down = matchingMovie.thumbs_down
     let backendId = matchingMovie.id
+    
     
     if(thumbId == "thumbsUp"){
         patchObj = {
@@ -174,7 +154,7 @@ increaseCount = (matchingMovie, thumbId) => {
 }
 
 postMovie = (movieId, movieTitle, thumbId) => {
-
+    
     if (thumbId == "thumbsUp"){
         postObj = {
             method: "POST",
@@ -220,7 +200,7 @@ postMovie = (movieId, movieTitle, thumbId) => {
 
 // event handling
 document.onclick = (event) => {
-    // what if i make the if statement below into its own function that in invoked when an imaged is clicked.
+
     if (event.target.tagName === "IMG"){
         
         const movieSection = event.target.parentElement;
@@ -229,7 +209,6 @@ document.onclick = (event) => {
 
         movieObject(event.target.dataset.movieId)
     }
-
 
     if (event.target.id === "close-content"){
         const contentSection = event.target.parentElement;
