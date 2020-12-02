@@ -7,4 +7,4 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 
-movie_one = Movie.create(movie_title: "Cool Movie", thumbs_up: 5, thumbs_down: 0)
+movie_one = Movie.create(movie_id: 20948, movie_title: "Cool Movie", thumbs_up: 0, thumbs_down: 0)

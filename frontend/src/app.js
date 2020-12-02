@@ -9,6 +9,38 @@ const inputElement = document.getElementById("input-value")
 const searchedMovies = document.getElementById("searched-movies")
 const imageElement = document.querySelector("img")
 
+// get thumbs up and thumbs down buttons AFTER they have been rendered(after the image has been clicked), put an event listener on them...to do what? I want the appropriate button to send a post or patch request. 
+
+searchBtnElement.onclick = (event) => {
+    event.preventDefault()
+    const value = inputElement.value
+    
+    fetch(searchURL+ "&query=" + value)
+    .then(resp => resp.json() )
+    .then(renderSearchMovies)
+    inputElement.value=""; // this is clearing the input area once the search button has been clicked
+}
+
+renderSearchMovies = (data) => {
+    searchedMovies.innerHTML = "";
+    const movies = data.results;
+    const movieArea = movieContainer(movies);
+    searchedMovies.appendChild(movieArea)
+}
+
+movieContainer = (movies) => {
+    const movieElement = document.createElement("div");
+    movieElement.setAttribute("class", "movie");
+
+    const movieTemplate = 
+    `<div class="searched-movie-posters">
+        ${movieSection(movies)}  
+    </div>
+    <div class="content-section"></div>`;
+    movieElement.innerHTML = movieTemplate; 
+    return movieElement;
+}
+
 
 movieSection = (movies) => {
     return movies.map((movie)=>{
@@ -22,39 +54,9 @@ movieSection = (movies) => {
     })
 }
 
-movieContainer = (movies) => {
-    const movieElement = document.createElement("div");
-    movieElement.setAttribute("class", "movie");
 
-    const movieTemplate = `
-    <div class="searched-movie-section">
-        ${movieSection(movies)}  
-    </div> 
-    <div class="content-section">
-        <p id="close-content">Close Content</p> 
-    </div>`;
-    movieElement.innerHTML = movieTemplate; 
-    return movieElement;
-}
-
-renderSearchMovies = (data) => {
-    searchedMovies.innerHTML = "";
-    const movies = data.results;
-    const movieArea = movieContainer(movies);
-    searchedMovies.appendChild(movieArea)
-}
-
-searchBtnElement.onclick = (event) => {
-    event.preventDefault()
-    const value = inputElement.value
-    
-    fetch(searchURL+ "&query=" + value)
-    .then(resp => resp.json() )
-    .then(renderSearchMovies)
-    inputElement.value="";
-}
-
-//this is searching for the credits of the clicked movie
+// movieObject invoked from document.onclick
+// this is searching for the credits of the clicked movie
 movieObject = (movieId) => { 
     fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=575e3ea9e83cb6a265c7d932c710688a&append_to_response=credits`)
     .then(resp => resp.json() )
@@ -63,7 +65,7 @@ movieObject = (movieId) => {
 
 // this is creating the clicked movie's content card
 retrieveMovieData = (movie) => {
-
+    // does a return statement belong here?!?!?!?!?!
     const contentSection = document.querySelector(".content-section")
     const crewMembers = movie.credits.crew
     let director = ""
@@ -73,32 +75,43 @@ retrieveMovieData = (movie) => {
         }
     })
 
-    const contentTemplate = `
+    const contentTemplate =
+        `<p id="close-content">X</p>
         <p id="title" title="${movie.title}" data-movie-id=${movie.id}>Title: ${movie.title}</p>
         <p>Director: ${director}</p>
         <p>Release Year: ${movie.release_date}</p>
         <p>Description: ${movie.overview}</p>
-        <button type="submit" id="thumbsUp" onclick="thumbRating(event)">Thumbs Up</button>   
-        <button type="submit" id="thumbsDown" onclick="thumbRating(event)">Thumbs Down</button>  
-    `
+        <submit id="thumbsUp" onclick="thumbRating(event)">Thumbs Up</submit>   
+        <submit id="thumbsDown" onclick="thumbRating(event)">Thumbs Down</button>`
     contentSection.innerHTML = contentTemplate
+    
 }
 
 thumbRating = (event) => {
     event.preventDefault()
-    console.log("thumbRating function hit")
     
     const movie = document.getElementById("title")
     const movieId = movie.dataset.movieId
     const movieTitle = movie.title
     const thumbId = event.target.id
     console.log("checking for a refresh")
-    console.log(event)
     
-    fetch(movieBackendURL, event.preventDefault())
-    .then( resp => resp.json() )
-    .then( moviesDatas => {checkForMovie(moviesDatas, movieId, movieTitle, thumbId)})
-    .catch( err => console.log(err))
+    fetchBackendURL(event)
+    // something might be wrong with my fetch
+    // fetch(movieBackendURL)
+    // .then( resp => resp.json() )
+    // .then(data => console.log(data))
+    // .catch( err => console.log(err))
+    // .then( moviesDatas => {checkForMovie(moviesDatas, movieId, movieTitle, thumbId)})
+    
+}
+
+fetchBackendURL = (event) => {
+    console.log("fetch function ---", event)
+    debugger
+    fetch(movieBackendURL)
+    .then(resp => resp.json() )
+    .then( data => console.log(data))
 }
     
 checkForMovie = (moviesDatas, movieId, movieTitle, thumbId) => {  
@@ -160,7 +173,6 @@ increaseCount = (matchingMovie, thumbId) => {
     }    
 }
 
-
 postMovie = (movieId, movieTitle, thumbId) => {
 
     if (thumbId == "thumbsUp"){
@@ -208,6 +220,7 @@ postMovie = (movieId, movieTitle, thumbId) => {
 
 // event handling
 document.onclick = (event) => {
+    // what if i make the if statement below into its own function that in invoked when an imaged is clicked.
     if (event.target.tagName === "IMG"){
         
         const movieSection = event.target.parentElement;
@@ -216,6 +229,7 @@ document.onclick = (event) => {
 
         movieObject(event.target.dataset.movieId)
     }
+
 
     if (event.target.id === "close-content"){
         const contentSection = event.target.parentElement;
