@@ -78,65 +78,47 @@ retrieveMovieData = (movie) => {
         <p>Director: ${director}</p>
         <p>Release Year: ${movie.release_date}</p>
         <p>Description: ${movie.overview}</p>
-        <button id="thumbsUp" >Thumbs Up</button>   
-        <button id="thumbsDown">Thumbs Down</button>  
+        <button type="submit" id="thumbsUp" onclick="thumbRating(event)">Thumbs Up</button>   
+        <button type="submit" id="thumbsDown" onclick="thumbRating(event)">Thumbs Down</button>  
     `
     contentSection.innerHTML = contentTemplate
 }
 
-
-// event handling
-document.onclick = (event) => {
-    if (event.target.tagName === "IMG"){
-        
-        const movieSection = event.target.parentElement;
-        const contentSection = movieSection.nextElementSibling;
-        contentSection.classList.add("content-section-display")
-
-        movieObject(event.target.dataset.movieId)
-    }
-
-    if (event.target.id === "close-content"){
-        const contentSection = event.target.parentElement;
-        contentSection.classList.remove("content-section-display")
-    }
+thumbRating = (event) => {
+    event.preventDefault()
+    console.log("thumbRating function hit")
     
-    // this if statement is listening for a thumbsup/down to then make a patch request if a review
-    // of the movie exists or a post request if the movie does not have an exisiting review. 
-    if(event.target.id === "thumbsUp" || event.target.id === "thumbsDown"){
-        event.preventDefault()
-        const movie = document.getElementById("title")
-        const movieId = movie.dataset.movieId
-        const movieTitle = movie.title
-        const thumbId = event.target.id
-
-
-        fetch(movieBackendURL)
-        .then( resp => resp.json() )
-        .then( moviesDatas => checkForMovie(moviesDatas, movieId, movieTitle, thumbId))
-        .catch( err => console.log(err))
-
-
-    }
+    const movie = document.getElementById("title")
+    const movieId = movie.dataset.movieId
+    const movieTitle = movie.title
+    const thumbId = event.target.id
+    console.log("checking for a refresh")
+    console.log(event)
+    
+    fetch(movieBackendURL, event.preventDefault())
+    .then( resp => resp.json() )
+    .then( moviesDatas => {checkForMovie(moviesDatas, movieId, movieTitle, thumbId)})
+    .catch( err => console.log(err))
 }
-
-checkForMovie = (moviesDatas, movieId, movieTitle, thumbId) => {    
-    let matchingMovie = {}
     
-    if (moviesDatas.length !== 0){
+checkForMovie = (moviesDatas, movieId, movieTitle, thumbId) => {  
+    
+    console.log(moviesDatas)
+    let matchingMovie = {}
+        
+    if (moviesDatas.length > 0){
+        
         moviesDatas.forEach( movie => {
-            if (movie.movie_id == movieId & thumbId === "thumbsUp"){
+            
+            if (movie.movie_id == movieId){
                 matchingMovie = movie
                 increaseCount(matchingMovie, thumbId) // patch request to update the thumbs up count
             }
-            else if (movie.movie_id == movieId & thumbId === "thumbsDown" ) {
-                increaseCount(matchingMovie, thumbId) // patch request to update teh thumbs down count
-            }
-            else if(movie.movie_id !== movieId){
+            else {
                 postMovie(movieId, movieTitle, thumbId)
             }
         })
-    } else if (moviesDatas.length == 0){
+    } else {
         postMovie(movieId, movieTitle, thumbId) 
     }
    
@@ -145,11 +127,10 @@ checkForMovie = (moviesDatas, movieId, movieTitle, thumbId) => {
 increaseCount = (matchingMovie, thumbId) => {
     console.log(matchingMovie, thumbId)
     let thumbs_up = matchingMovie.thumbs_up
+    let thumbs_down = matchingMovie.thumbs_down
     let backendId = matchingMovie.id
     
     if(thumbId == "thumbsUp"){
-        
-        
         patchObj = {
             method: "PATCH",
             headers: {
@@ -159,12 +140,20 @@ increaseCount = (matchingMovie, thumbId) => {
                 thumbs_up: thumbs_up + 1
             })
         }
-        // console.log("thumbs_up:", thumbs_up)
-        
-        // console.log("patchObj: ", patchObj)
-        // console.log(movieBackendURL + `/${backendId}`)
-
-
+        fetch(movieBackendURL + `/${backendId}`, patchObj)
+        .then(resp => resp.json() )
+        .then(data => console.log(data))
+    } 
+    else if (thumbId == "thumbsDown"){
+        patchObj = {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                thumbs_down: thumbs_down + 1
+            })
+        }
         fetch(movieBackendURL + `/${backendId}`, patchObj)
         .then(resp => resp.json() )
         .then(data => console.log(data))
@@ -173,9 +162,6 @@ increaseCount = (matchingMovie, thumbId) => {
 
 
 postMovie = (movieId, movieTitle, thumbId) => {
-    console.log(movieId, movieTitle, thumbId)
-    console.log("postMovie function reached")
-    // if thumbId == thumbsUp then post with thumbs_up: 1 and thumbs_down: 0
 
     if (thumbId == "thumbsUp"){
         postObj = {
@@ -217,6 +203,23 @@ postMovie = (movieId, movieTitle, thumbId) => {
         .then( resp => resp.json() )
         .then( movieData => console.log(movieData))
         .catch( err => console.log(err))
+    }
+}
+
+// event handling
+document.onclick = (event) => {
+    if (event.target.tagName === "IMG"){
+        
+        const movieSection = event.target.parentElement;
+        const contentSection = movieSection.nextElementSibling;
+        contentSection.classList.add("content-section-display")
+
+        movieObject(event.target.dataset.movieId)
+    }
+
+    if (event.target.id === "close-content"){
+        const contentSection = event.target.parentElement;
+        contentSection.classList.remove("content-section-display")
     }
 }
 

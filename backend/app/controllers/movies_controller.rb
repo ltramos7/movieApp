@@ -15,6 +15,7 @@ class MoviesController < ApplicationController
 
   # POST /movies
   def create
+    # byebug
     @movie = Movie.new(movie_params)
 
     if @movie.save
