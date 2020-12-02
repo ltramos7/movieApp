@@ -9,7 +9,6 @@ const inputElement = document.getElementById("input-value")
 const searchedMovies = document.getElementById("searched-movies")
 const imageElement = document.querySelector("img")
 
-// get thumbs up and thumbs down buttons AFTER they have been rendered(after the image has been clicked), put an event listener on them...to do what? I want the appropriate button to send a post or patch request. 
 
 searchBtnElement.onclick = (event) => {
     event.preventDefault()
@@ -41,14 +40,12 @@ movieContainer = (movies) => {
     return movieElement;
 }
 
-
 movieSection = (movies) => {
     return movies.map((movie)=>{
         
         if (movie.poster_path){
             return `<img src=${imgURL + movie.poster_path} alt="" data-movie-id=${movie.id} /> `
-        }
-        else{
+        }else{
             return `<h1> NO IMAGE AVAILABLE</h1>`
         }
     })
@@ -136,8 +133,7 @@ increaseCount = (matchingMovie, thumbId) => {
         fetch(movieBackendURL + `/${backendId}`, patchObj)
         .then(resp => resp.json() )
         .then(data => console.log(data))
-    } 
-    else if (thumbId == "thumbsDown"){
+    }else if (thumbId == "thumbsDown"){
         patchObj = {
             method: "PATCH",
             headers: {
@@ -169,14 +165,13 @@ postMovie = (movieId, movieTitle, thumbId) => {
                 thumbs_down: 0
             })
         }
-
+        
         fetch(movieBackendURL, postObj)
         .then( resp => resp.json() )
         .then( movieData => console.log(movieData))
         .catch( err => console.log(err)) 
 
-    }
-    else if (thumbId == "thumbsDown"){
+    }else if (thumbId == "thumbsDown"){
         postObj = {
             method: "POST",
             headers: {
