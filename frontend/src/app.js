@@ -9,6 +9,9 @@ const inputElement = document.getElementById("input-value")
 const searchedMovies = document.getElementById("searched-movies")
 const imageElement = document.querySelector("img")
 
+// things to do
+// add a thumbs up/down icon .... Alejandro knows the icons website(also located in the build portfolio with sass youtube video)
+
 
 searchBtnElement.onclick = (event) => {
     event.preventDefault()
@@ -78,15 +81,18 @@ retrieveMovieData = (movie) => {
         <p>Director: ${director}</p>
         <p>Release Year: ${movie.release_date}</p>
         <p>Description: ${movie.overview}</p>
-        <button type="button" id="thumbsUp" onclick="thumbRating(event)">Thumbs Up</button>   
-        <button type="button" id="thumbsDown" onclick="thumbRating(event)">Thumbs Down</button>`
+        <div class="thumbs">
+        <i class="far fa-thumbs-up" id="thumbsUp" onclick="thumbRating(event)"></i>
+        <i class="far fa-thumbs-down"id="thumbsDown" onclick="thumbRating(event)"></i>
+        </div>        
+        `
     contentSection.innerHTML = contentTemplate
     
 }
 
 thumbRating = (event) => {
     event.preventDefault()
-    
+    console.log("thumb rating function hit")
     const movie = document.getElementById("title")
     const movieId = movie.dataset.movieId
     const movieTitle = movie.title
@@ -114,7 +120,6 @@ checkForMovie = (moviesDatas, movieId, movieTitle, thumbId) => {
 }
 
 increaseCount = (matchingMovie, thumbId) => {
-    console.log(matchingMovie, thumbId)
     let thumbs_up = matchingMovie.thumbs_up
     let thumbs_down = matchingMovie.thumbs_down
     let backendId = matchingMovie.id
@@ -165,7 +170,7 @@ postMovie = (movieId, movieTitle, thumbId) => {
                 thumbs_down: 0
             })
         }
-        
+
         fetch(movieBackendURL, postObj)
         .then( resp => resp.json() )
         .then( movieData => console.log(movieData))
