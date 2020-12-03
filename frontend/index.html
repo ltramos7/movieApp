@@ -5,23 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./src/style.css">
     <script src="https://kit.fontawesome.com/d29a87e3b9.js" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Major+Mono+Display&display=swap" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Catamaran:wght@200&display=swap" rel="stylesheet">
+    
     <title>Movie Search</title>
 </head>
 <body>
-    <div class="search-container">
-        <h1>Welcome to movie search</h1>
-        <form>
-            <div class="form-group">
-                <input type="text" id="input-value">
+    <div class="header-area">
+        <div class="brand-area">
+            <h1>MovieInfo</h1>
+            <h3>Find out what you like and don't like.</h3>
+        </div>
+        <form class="search-area">
+            <input class="search-bar" type="text" id="input-value">
+            <i class="fas fa-search" type="submit" id="search-btn"></i>
+            <!-- <div class="form-group">
             </div>
-
-            <button type="submit" id="search-btn">Search</button>
+            <div>
+            </div> -->
         </form>
     </div>
 
     <div id="searched-movies"></div>
-    
-
 
     <script src="./src/app.js"></script>
 </body>

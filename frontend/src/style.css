@@ -1,3 +1,20 @@
+body h1{
+    font-family: 'Major Mono Display', monospace;
+    color: rgb(172, 75, 41);
+    text-shadow: 4px 6px 5px #c5c5c5;
+
+}
+
+body h3{
+    font-family: 'Catamaran', sans-serif;
+}
+
+.brand-area{
+    background-color: paleturquoise;
+    opacity: 0.5;
+    grid-column: 1/5;
+}
+
 #close-content{
     color: red;
     cursor: pointer;
@@ -17,6 +34,16 @@
 
 .form-group {
     margin-bottom: 1rem;
+    width: 50%;
+}
+
+/* h1{
+    font-family: 'Major Mono Display', monospace;
+} */
+.header-area{
+    background-color: orange;
+    display: grid;
+    grid-template-columns: repeat(12,1fr);
 }
 
 img:hover{
@@ -24,9 +51,10 @@ img:hover{
     transform: scale(1.1);
     cursor: pointer;
 }
-
+/* 
+don't plan on using this for styling purpose. input-value is useful for app.js
 #input-value {
-    width: 760px;
+    width: 100%;
     padding: .375rem .75rem;
     font-size: 1rem;
     font-weight: 400;
@@ -36,11 +64,30 @@ img:hover{
     background-color: #fff;
     border: 1px solid #bebebe;
     border-radius: .25rem;
+} */
+
+.search-area{
+    /* display: flex;
+    grid-gap: 5px;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    background-color: pink; */
+    grid-column: 5/12;
+    
+}
+
+.search-bar{
+    width: 80%;
+    height: 30px;
+   
 }
 
 #search-btn  {
-    color: #fff;
+    cursor: pointer;
+    margin-top: 5px;
+    margin-left: 5px;
+    /* color: #fff;
     background-color: #007bff;
+    line-height: 1.5;
     outline: none;
     min-height: 38px;
     font-weight: 400;
@@ -48,10 +95,15 @@ img:hover{
     cursor: pointer;
     padding: .375rem .75rem;
     font-size: 1rem;
-    line-height: 1.5;
     border-radius: .25rem;
-    margin-bottom: 1rem;
+    margin-bottom: 1rem; */
     
+}
+
+
+
+.searched-movie-posters {
+    background-color: rgba(116, 114, 119, 0.726);
 }
 
 .searched-movie-posters {
@@ -63,6 +115,7 @@ img:hover{
 .searched-movie-posters img{
     width: 400px;
     height: 400px;
+    margin: 1rem;
 }
 
 .thumbs{
