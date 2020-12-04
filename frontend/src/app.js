@@ -10,11 +10,12 @@ const inputElement = document.getElementById("input-value")
 const searchedMovies = document.getElementById("searched-movies")
 const imageElement = document.querySelector("img")
 const popularMovieDiv = document.getElementById("popular-movies")
+// const searchedMoviesDiv = document.getElementById("searched-movies")
 
 
 
 getPopularMovies = () => {
-    popularMovieDiv.innerHTML = `<h4>Popular Movies</h4>`
+    popularMovieDiv.innerHTML = `<h3>Popular Movies</h3>`
     fetch(popularURL)
     .then(resp => resp.json())
     .then(data => renderPopularMovies(data.results))
@@ -22,9 +23,8 @@ getPopularMovies = () => {
 }
 
 renderPopularMovies = (movies) => {
-    console.log(movies)
     const popMovieDiv = document.createElement("div")
-    popMovieDiv.setAttribute("class", "test-popular-movie")
+    popMovieDiv.setAttribute("class", "popular-movie")
     const popularMovieImages = getPopularMovieImages(movies)
     popMovieDiv.innerHTML = popularMovieImages
     popularMovieDiv.appendChild(popMovieDiv)
@@ -44,15 +44,17 @@ getPopularMovieImages = (movies) => {
 searchBtnElement.onclick = (event) => {
     event.preventDefault()
     const value = inputElement.value
+
     
     fetch(searchURL+ "&query=" + value)
     .then(resp => resp.json() )
     .then(renderSearchMovies)
     inputElement.value=""; // this is clearing the input area once the search button has been clicked
+    
 }
 
 renderSearchMovies = (data) => {
-    searchedMovies.innerHTML = "";
+    searchedMovies.innerHTML = `<h3>Seached Movies</h3>`
     const movies = data.results;
     const movieArea = movieContainer(movies);
     searchedMovies.appendChild(movieArea)
@@ -104,7 +106,7 @@ retrieveMovieData = (movie) => {
         }
     })
 
-    debugger
+ 
     const contentTemplate =
         `<p id="close-content">X</p>
         <p id="title" title="${movie.title}" data-movie-id=${movie.id}>Title: ${movie.title}</p>
@@ -112,8 +114,8 @@ retrieveMovieData = (movie) => {
         <p>Release Year: ${movie.release_date}</p>
         <p>Description: ${movie.overview}</p>
         <div class="thumbs">
-        <i class="far fa-thumbs-up" id="thumbsUp" onclick="thumbRating(event)">1</i>
-        <i class="far fa-thumbs-down"id="thumbsDown" onclick="thumbRating(event)">5</i>
+        <i class="fas fa-thumbs-up" id="thumbsUp" onclick="thumbRating(event)"></i>
+        <i class="fas fa-thumbs-down"id="thumbsDown" onclick="thumbRating(event)"></i>
         </div>        
         `
     contentSection.innerHTML = contentTemplate
@@ -240,15 +242,20 @@ postMovie = (movieId, movieTitle, thumbId) => {
 
 // event handling
 document.onclick = (event) => {
-
+    
     if (event.target.tagName === "IMG"){
-        
+    
         const movieSection = event.target.parentElement;
         console.log(movieSection)
         const contentSection = movieSection.nextElementSibling;
         console.log(contentSection)
         contentSection.classList.add("content-section-display")
-
+        // ---------------------------------
+        const popularSection = event.target.parentElement;
+        const popularContentSection = popularSection.nextElementSibling;
+        popularContentSection.classList.add(("content-section-display"))
+        // ---------------------------------
+        
         movieObject(event.target.dataset.movieId)
     }
 
