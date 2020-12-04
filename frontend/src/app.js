@@ -3,15 +3,42 @@ const searchURL = "https://api.themoviedb.org/3/search/movie?api_key=575e3ea9e83
 const imgURL = "https://image.tmdb.org/t/p/w300"
 const movieURL = "https://api.themoviedb.org/3/movie/"
 const movieBackendURL = "http://localhost:3000/movies"
+const popularURL = "https://api.themoviedb.org/3/movie/popular?api_key=575e3ea9e83cb6a265c7d932c710688a&language=en-US&page=1"
 
 const searchBtnElement = document.getElementById("search-btn")
 const inputElement = document.getElementById("input-value")
 const searchedMovies = document.getElementById("searched-movies")
 const imageElement = document.querySelector("img")
+const popularMovieDiv = document.getElementById("popular-movies")
 
 // things to do
 // add a thumbs up/down icon .... Alejandro knows the icons website(also located in the build portfolio with sass youtube video)
+getPopularMovies = () => {
+    fetch(popularURL)
+    .then(resp => resp.json())
+    .then(data => renderPopularMovies(data.results))
+    // .then(data => console.log(data.results))
+}
 
+renderPopularMovies = (movies) => {
+    console.log(movies)
+    const popMovieDiv = document.createElement("div")
+    popMovieDiv.setAttribute("class", "test-popular-movie")
+    const popularMovieImages = getPopularMovieImages(movies)
+    popMovieDiv.innerHTML = popularMovieImages
+    popularMovieDiv.appendChild(popMovieDiv)
+}
+
+getPopularMovieImages = (movies) => {
+    return movies.map((movie)=>{
+        
+        if (movie.poster_path){
+            return `<img src=${imgURL + movie.poster_path} alt="" data-movie-id=${movie.id} /> `
+        }else{
+            return `<h1> NO IMAGE AVAILABLE</h1>`
+        }
+    })
+}
 
 searchBtnElement.onclick = (event) => {
     event.preventDefault()
@@ -60,12 +87,13 @@ movieSection = (movies) => {
 movieObject = (movieId) => { 
     fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=575e3ea9e83cb6a265c7d932c710688a&append_to_response=credits`)
     .then(resp => resp.json() )
-    .then(data => retrieveMovieData(data) )
+    .then(data => retrieveMovieData(data))
+    // .then(data => console.log(data))
 }
 
 // this is creating the clicked movie's content card
-retrieveMovieData = (movie) => {
-    
+retrieveMovieData = (movie) => {  
+
     const contentSection = document.querySelector(".content-section")
     const crewMembers = movie.credits.crew
     let director = ""
@@ -75,6 +103,7 @@ retrieveMovieData = (movie) => {
         }
     })
 
+    
     const contentTemplate =
         `<p id="close-content">X</p>
         <p id="title" title="${movie.title}" data-movie-id=${movie.id}>Title: ${movie.title}</p>
@@ -82,8 +111,8 @@ retrieveMovieData = (movie) => {
         <p>Release Year: ${movie.release_date}</p>
         <p>Description: ${movie.overview}</p>
         <div class="thumbs">
-        <i class="far fa-thumbs-up" id="thumbsUp" onclick="thumbRating(event)"></i>
-        <i class="far fa-thumbs-down"id="thumbsDown" onclick="thumbRating(event)"></i>
+        <i class="far fa-thumbs-up" id="thumbsUp" onclick="thumbRating(event)">1</i>
+        <i class="far fa-thumbs-down"id="thumbsDown" onclick="thumbRating(event)">5</i>
         </div>        
         `
     contentSection.innerHTML = contentTemplate
@@ -204,7 +233,9 @@ document.onclick = (event) => {
     if (event.target.tagName === "IMG"){
         
         const movieSection = event.target.parentElement;
+        console.log(movieSection)
         const contentSection = movieSection.nextElementSibling;
+        console.log(contentSection)
         contentSection.classList.add("content-section-display")
 
         movieObject(event.target.dataset.movieId)
@@ -215,6 +246,8 @@ document.onclick = (event) => {
         contentSection.classList.remove("content-section-display")
     }
 }
+
+getPopularMovies()
 
 
 

@@ -10,9 +10,10 @@ body h3{
 }
 
 .brand-area{
-    background-color: paleturquoise;
-    opacity: 0.5;
+    /* background-color: paleturquoise; */
+    /* opacity: 0.5; */
     grid-column: 1/5;
+    margin-left: 1rem;
 }
 
 #close-content{
@@ -41,9 +42,12 @@ body h3{
     font-family: 'Major Mono Display', monospace;
 } */
 .header-area{
-    background-color: orange;
+    /* background-color: orange; */
     display: grid;
-    grid-template-columns: repeat(12,1fr);
+    grid-template-columns: repeat(autofill, minmax(40px, 1fr));
+    grid-template-rows: 40px;
+    /* grid-template-columns: repeat(12,1fr);
+    grid-template-rows: repeat(3, 40px); */
 }
 
 img:hover{
@@ -72,13 +76,13 @@ don't plan on using this for styling purpose. input-value is useful for app.js
     grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
     background-color: pink; */
     grid-column: 5/12;
+    grid-row: 2/2
     
 }
 
 .search-bar{
     width: 80%;
     height: 30px;
-   
 }
 
 #search-btn  {
@@ -100,22 +104,29 @@ don't plan on using this for styling purpose. input-value is useful for app.js
     
 }
 
-
-
-.searched-movie-posters {
-    background-color: rgba(116, 114, 119, 0.726);
-}
-
 .searched-movie-posters {
     display: flex; 
+    background-color: rgba(107, 22, 22, 0.938);
     width: 100%;
     overflow-x: auto;
+    border-radius: 10px;
+    
 }
 
 .searched-movie-posters img{
     width: 400px;
     height: 400px;
     margin: 1rem;
+}
+
+.test-popular-movie{
+    display: flex;
+    width: 100%;
+    overflow-x: auto;
+}
+.popular-movies{
+    width: 100%;
+    overflow-x: auto;
 }
 
 .thumbs{
