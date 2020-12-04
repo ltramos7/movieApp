@@ -1,20 +1,37 @@
+/* logo red: #ac4b29 */
+/* greenish blue: #2989ac */
+/* bluer blue: #4c29ac */
+/* greenish: #89ac29 */
+/* shadow color: #c5c5c5 */
+body{
+    background-color:  #eaf4f8 ;
+    margin-left: 6rem;
+    margin-right: 6rem;
+}
+
 body h1{
     font-family: 'Major Mono Display', monospace;
     color: rgb(172, 75, 41);
     text-shadow: 4px 6px 5px #c5c5c5;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
 
 }
 
 body h3{
     font-family: 'Catamaran', sans-serif;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
 }
 
 .brand-area{
     /* background-color: paleturquoise; */
     /* opacity: 0.5; */
-    grid-column: 1/5;
-    margin-left: 1rem;
+    grid-column: 0/2;
+    grid-row: auto;
+    /* margin-left: 1rem; */
 }
+
 
 #close-content{
     color: red;
@@ -42,12 +59,10 @@ body h3{
     font-family: 'Major Mono Display', monospace;
 } */
 .header-area{
-    /* background-color: orange; */
     display: grid;
     grid-template-columns: repeat(autofill, minmax(40px, 1fr));
     grid-template-rows: 40px;
-    /* grid-template-columns: repeat(12,1fr);
-    grid-template-rows: repeat(3, 40px); */
+    margin-bottom: 50px;
 }
 
 img:hover{
@@ -75,7 +90,7 @@ don't plan on using this for styling purpose. input-value is useful for app.js
     grid-gap: 5px;
     grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
     background-color: pink; */
-    grid-column: 5/12;
+    grid-column: 2/12;
     grid-row: 2/2
     
 }
@@ -83,6 +98,8 @@ don't plan on using this for styling purpose. input-value is useful for app.js
 .search-bar{
     width: 80%;
     height: 30px;
+    border-radius: 5px;
+    
 }
 
 #search-btn  {
@@ -110,6 +127,7 @@ don't plan on using this for styling purpose. input-value is useful for app.js
     width: 100%;
     overflow-x: auto;
     border-radius: 10px;
+    margin-bottom: 2rem;
     
 }
 

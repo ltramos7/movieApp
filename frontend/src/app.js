@@ -11,9 +11,10 @@ const searchedMovies = document.getElementById("searched-movies")
 const imageElement = document.querySelector("img")
 const popularMovieDiv = document.getElementById("popular-movies")
 
-// things to do
-// add a thumbs up/down icon .... Alejandro knows the icons website(also located in the build portfolio with sass youtube video)
+
+
 getPopularMovies = () => {
+    popularMovieDiv.innerHTML = `<h4>Popular Movies</h4>`
     fetch(popularURL)
     .then(resp => resp.json())
     .then(data => renderPopularMovies(data.results))
@@ -103,7 +104,7 @@ retrieveMovieData = (movie) => {
         }
     })
 
-    
+    debugger
     const contentTemplate =
         `<p id="close-content">X</p>
         <p id="title" title="${movie.title}" data-movie-id=${movie.id}>Title: ${movie.title}</p>
@@ -129,8 +130,11 @@ thumbRating = (event) => {
     
     fetch(movieBackendURL)
     .then( resp => resp.json() )
-    .then( moviesDatas => {checkForMovie(moviesDatas, movieId, movieTitle, thumbId)})
+    .then( moviesDatas => {test(), checkForMovie(moviesDatas, movieId, movieTitle, thumbId)})
     .catch( err => console.log(err))   
+}
+test = () => {
+    console.log("testing to see if I can do two functions in a .then statement")
 }
     
 checkForMovie = (moviesDatas, movieId, movieTitle, thumbId) => {  
@@ -152,6 +156,9 @@ increaseCount = (matchingMovie, thumbId) => {
     let thumbs_up = matchingMovie.thumbs_up
     let thumbs_down = matchingMovie.thumbs_down
     let backendId = matchingMovie.id
+
+    const thumbsUp = document.getElementById("thumbsUp")
+    const thumbsDown = document.getElementById("thumbsDown")    
     
     
     if(thumbId == "thumbsUp"){
@@ -166,7 +173,9 @@ increaseCount = (matchingMovie, thumbId) => {
         }
         fetch(movieBackendURL + `/${backendId}`, patchObj)
         .then(resp => resp.json() )
-        .then(data => console.log(data))
+        .then(data => {
+            thumbsUp.innerHTML = `${data.thumbs_up}`
+        })
     }else if (thumbId == "thumbsDown"){
         patchObj = {
             method: "PATCH",
@@ -179,7 +188,9 @@ increaseCount = (matchingMovie, thumbId) => {
         }
         fetch(movieBackendURL + `/${backendId}`, patchObj)
         .then(resp => resp.json() )
-        .then(data => console.log(data))
+        .then(data => {
+            thumbsDown.innerHTML = `${data.thumbs_down}`
+        })
     }    
 }
 
