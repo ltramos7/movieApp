@@ -247,14 +247,11 @@ document.onclick = (event) => {
     
         const movieSection = event.target.parentElement;
         console.log(movieSection)
+        
         const contentSection = movieSection.nextElementSibling;
         console.log(contentSection)
         contentSection.classList.add("content-section-display")
-        // ---------------------------------
-        const popularSection = event.target.parentElement;
-        const popularContentSection = popularSection.nextElementSibling;
-        popularContentSection.classList.add(("content-section-display"))
-        // ---------------------------------
+        
         
         movieObject(event.target.dataset.movieId)
     }
