@@ -200,7 +200,7 @@ don't plan on using this for styling purpose. input-value is useful for app.js
 #thumbsDown{
     font-size: 2rem; 
     color: tomato;
-    margin: 10px;
+    margin-left: 10px;
     cursor: pointer;
 }
 /* .thumbs{

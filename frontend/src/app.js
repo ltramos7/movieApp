@@ -1,26 +1,23 @@
 const API_KEY = "575e3ea9e83cb6a265c7d932c710688a";
+// API URLs
 const searchURL = "https://api.themoviedb.org/3/search/movie?api_key=575e3ea9e83cb6a265c7d932c710688a";
 const imgURL = "https://image.tmdb.org/t/p/w300"
 const movieURL = "https://api.themoviedb.org/3/movie/"
 const movieBackendURL = "http://localhost:3000/movies"
 const popularURL = "https://api.themoviedb.org/3/movie/popular?api_key=575e3ea9e83cb6a265c7d932c710688a&language=en-US&page=1"
 
+// DOM Elements
 const searchBtnElement = document.getElementById("search-btn")
 const inputElement = document.getElementById("input-value")
 const searchedMovies = document.getElementById("searched-movies")
 const imageElement = document.querySelector("img")
 const popularMovieDiv = document.getElementById("popular-movies")
-// const searchedMoviesDiv = document.getElementById("searched-movies")
-
-
-
 
 getPopularMovies = () => {
     popularMovieDiv.innerHTML = `<h3>Popular Movies</h3>`
     fetch(popularURL)
     .then(resp => resp.json())
     .then(data => renderPopularMovies(data.results))
-    // .then(data => console.log(data.results))
 }
 
 renderPopularMovies = (movies) => {
@@ -40,12 +37,10 @@ getPopularMovieImages = (movies) => {
     })
 }
 
-
 searchBtnElement.onclick = (event) => {
     event.preventDefault()
     const value = inputElement.value
 
-    
     fetch(searchURL+ "&query=" + value)
     .then(resp => resp.json() )
     .then(renderSearchMovies)
@@ -65,11 +60,13 @@ movieContainer = (movies) => {
     movieElement.setAttribute("class", "movie");
 
     const movieTemplate = 
-    `<div class="searched-movie-posters">
-        ${movieSection(movies)}  
-    </div>
-    <div class="content-section"></div>`;
+        `<div class="searched-movie-posters">
+            ${movieSection(movies)}  
+        </div>
+        <div class="content-section"></div>`;
+
     movieElement.innerHTML = movieTemplate; 
+
     return movieElement;
 }
 
@@ -89,7 +86,6 @@ movieObject = (movieId) => {
     fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=575e3ea9e83cb6a265c7d932c710688a&append_to_response=credits`)
     .then(resp => resp.json() )
     .then(data => retrieveMovieData(data))
-    // .then(data => console.log(data))
 }
 
 // this is creating the clicked movie's content card
@@ -104,7 +100,6 @@ retrieveMovieData = (movie) => {
         }
     })
 
- 
     const contentTemplate =
         `<p id="close-content">X</p>
         <p id="title" title="${movie.title}" data-movie-id=${movie.id}>Title: ${movie.title}</p>
@@ -156,7 +151,6 @@ increaseCount = (matchingMovie, thumbId) => {
 
     const thumbsUp = document.getElementById("thumbsUp")
     const thumbsDown = document.getElementById("thumbsDown")    
-    
     
     if(thumbId == "thumbsUp"){
         patchObj = {
@@ -216,8 +210,6 @@ postMovie = (movieId, movieTitle, thumbId) => {
             thumbsUp.innerHTML = `${movieData.thumbs_up}`
         })
         .catch( err => console.log(err)) 
-        // .then( movieData => console.log(movieData))
-
     }else if (thumbId == "thumbsDown"){
         postObj = {
             method: "POST",
@@ -239,7 +231,6 @@ postMovie = (movieId, movieTitle, thumbId) => {
             thumbsDown.innerHTML = `${movieData.thumbs_down}`
         })
         .catch( err => console.log(err))
-        // .then( movieData => console.log(movieData))
     }
 }
 
@@ -265,6 +256,7 @@ document.onclick = (event) => {
     }
 }
 
+// invoked functions
 getPopularMovies()
 
 
