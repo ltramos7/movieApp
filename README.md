@@ -25,7 +25,7 @@ Clone the repository into your desired directory. Once the respository has been 
 
 1. open a terminal and `cd` into `backend`, then run the rails server using `rails s`
 2. open a second terminal tab or window and `cd` into `frontend` (make sure you're in the proper directory that holds your `/frontend` directory) 
-3. run the command `open index.html` to get the **movieApp** on your browswer
+3. run the command `open index.html` to get the **movieApp** on your browser
 
 # API Reference
 
