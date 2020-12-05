@@ -14,6 +14,7 @@ const popularMovieDiv = document.getElementById("popular-movies")
 
 
 
+
 getPopularMovies = () => {
     popularMovieDiv.innerHTML = `<h3>Popular Movies</h3>`
     fetch(popularURL)
@@ -35,11 +36,10 @@ getPopularMovieImages = (movies) => {
         
         if (movie.poster_path){
             return `<img src=${imgURL + movie.poster_path} alt="" data-movie-id=${movie.id} /> `
-        }else{
-            return `<h1> NO IMAGE AVAILABLE</h1>`
         }
     })
 }
+
 
 searchBtnElement.onclick = (event) => {
     event.preventDefault()
@@ -75,11 +75,9 @@ movieContainer = (movies) => {
 
 movieSection = (movies) => {
     return movies.map((movie)=>{
-        
+       
         if (movie.poster_path){
             return `<img src=${imgURL + movie.poster_path} alt="" data-movie-id=${movie.id} /> `
-        }else{
-            return `<h1> NO IMAGE AVAILABLE</h1>`
         }
     })
 }
@@ -115,7 +113,7 @@ retrieveMovieData = (movie) => {
         <p>Description: ${movie.overview}</p>
         <div class="thumbs">
         <i class="fas fa-thumbs-up" id="thumbsUp" onclick="thumbRating(event)"></i>
-        <i class="fas fa-thumbs-down"id="thumbsDown" onclick="thumbRating(event)"></i>
+        <i class="fas fa-thumbs-down" id="thumbsDown" onclick="thumbRating(event)"></i>
         </div>        
         `
     contentSection.innerHTML = contentTemplate
@@ -123,8 +121,8 @@ retrieveMovieData = (movie) => {
 }
 
 thumbRating = (event) => {
+    
     event.preventDefault()
-    console.log("thumb rating function hit")
     const movie = document.getElementById("title")
     const movieId = movie.dataset.movieId
     const movieTitle = movie.title
@@ -132,11 +130,8 @@ thumbRating = (event) => {
     
     fetch(movieBackendURL)
     .then( resp => resp.json() )
-    .then( moviesDatas => {test(), checkForMovie(moviesDatas, movieId, movieTitle, thumbId)})
+    .then( moviesDatas => {checkForMovie(moviesDatas, movieId, movieTitle, thumbId)})
     .catch( err => console.log(err))   
-}
-test = () => {
-    console.log("testing to see if I can do two functions in a .then statement")
 }
     
 checkForMovie = (moviesDatas, movieId, movieTitle, thumbId) => {  
@@ -197,6 +192,8 @@ increaseCount = (matchingMovie, thumbId) => {
 }
 
 postMovie = (movieId, movieTitle, thumbId) => {
+    const thumbsUp = document.getElementById("thumbsUp")
+    const thumbsDown = document.getElementById("thumbsDown")   
     
     if (thumbId == "thumbsUp"){
         postObj = {
@@ -215,8 +212,11 @@ postMovie = (movieId, movieTitle, thumbId) => {
 
         fetch(movieBackendURL, postObj)
         .then( resp => resp.json() )
-        .then( movieData => console.log(movieData))
+        .then( movieData => {
+            thumbsUp.innerHTML = `${movieData.thumbs_up}`
+        })
         .catch( err => console.log(err)) 
+        // .then( movieData => console.log(movieData))
 
     }else if (thumbId == "thumbsDown"){
         postObj = {
@@ -235,8 +235,11 @@ postMovie = (movieId, movieTitle, thumbId) => {
 
         fetch(movieBackendURL, postObj)
         .then( resp => resp.json() )
-        .then( movieData => console.log(movieData))
+        .then( movieData => {
+            thumbsDown.innerHTML = `${movieData.thumbs_down}`
+        })
         .catch( err => console.log(err))
+        // .then( movieData => console.log(movieData))
     }
 }
 
