@@ -14,7 +14,7 @@ The backend is using Ruby on Rails with a SQLite database to hold the thumb rati
 
 # Installation
 
-* I built this app on the following versions:
+I built this app on the following versions:
 * Ruby 2.6.1
 * Rails 6.0.3.4
 * Node v14.15.0
